@@ -33,8 +33,6 @@ public class AddSchoolInfoServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		response.setCharacterEncoding("utf-8");
-		response.setContentType("application/json");
 		String json = "", line;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		while ((line = reader.readLine()) != null) {
@@ -44,8 +42,10 @@ public class AddSchoolInfoServlet extends HttpServlet {
 		
 		JSONObject object = new JSONObject();
 		object.accumulate("success", false);
-		object.accumulate("failReason:", "院系名称已存�?");
+		object.accumulate("failReason", "院系名称已存在");
 		
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 		out.print(object);
 		out.flush();
