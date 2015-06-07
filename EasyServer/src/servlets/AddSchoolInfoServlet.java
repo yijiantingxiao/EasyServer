@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.SchoolInfo;
 import net.sf.json.JSONObject;
 
 /**
@@ -37,11 +38,17 @@ public class AddSchoolInfoServlet extends HttpServlet {
 		while ((line = reader.readLine()) != null) {
 		    json += line;
 		}
-		System.out.println(json);
-		
+		//System.out.println(json);
+		JSONObject jsonObject = JSONObject.fromObject(json);
 		JSONObject object = new JSONObject();
-		object.accumulate("success", false);
-		object.accumulate("failReason", "院系名称已存在");
+		SchoolInfo schoolInfo = (SchoolInfo) JSONObject.toBean(jsonObject, SchoolInfo.class);
+		if (schoolInfo.getSchoolName() != null && schoolInfo.getCreditRequirement() != 0) {
+			object.accumulate("success", true);
+			object.accumulate("failReason", "");
+		} else {
+			jsonObject.accumulate("success", false);
+			object.accumulate("failReason", "");
+		}		
 		
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("application/json");
